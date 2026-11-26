@@ -8,19 +8,44 @@ body {
 }
 .stage { width: min(100vw, 900px); padding: 14px; position: relative; }
 .game { position: relative; }
+.viewport { position: relative; }
 .canvas {
   width: 100%; aspect-ratio: 2 / 1; display: block;
   border-radius: 28px; border: 6px solid #fff;
   box-shadow: 0 8px 24px rgba(60,120,180,.25), inset 0 0 0 2px #cfe6f7;
 }
 .touch { display: flex; justify-content: space-between; margin-top: 14px; }
+.pad { display: flex; gap: 10px; width: 42%; }
 .touch button {
-  width: 30%; height: 64px; font-size: 28px; color: #5a7fa8;
+  flex: 1; height: 64px; font-size: 28px; color: #5a7fa8;
   border: 3px solid #cfe6f7; border-radius: 32px;
   background: linear-gradient(#ffffff, #eaf4fb);
   box-shadow: 0 4px 0 #cfe6f7; touch-action: none; user-select: none;
+  -webkit-user-select: none; -webkit-touch-callout: none;
 }
 .touch button:active { transform: translateY(3px); box-shadow: 0 1px 0 #cfe6f7; }
+.unlock-bubble {
+  position: absolute; transform: translate(-50%, -100%);
+  padding: 8px 16px; font: inherit; font-weight: 800; font-size: 15px; white-space: nowrap;
+  color: #fff; border: 3px solid #fff; border-radius: 24px; cursor: pointer;
+  background: linear-gradient(#5db3ff, #2f8fe8);
+  box-shadow: 0 4px 0 #2271bd, 0 8px 18px rgba(60,120,180,.3);
+  animation: bubble-in .35s cubic-bezier(.2,1.4,.4,1), bubble-float 1.6s ease-in-out .35s infinite;
+}
+/* kleine Sprechblasen-Spitze zum Geschenk */
+.unlock-bubble::after {
+  content: ""; position: absolute; left: 50%; bottom: -9px; transform: translateX(-50%);
+  border: 7px solid transparent; border-top-color: #fff; border-bottom: 0;
+}
+.unlock-bubble:active { box-shadow: 0 1px 0 #2271bd; translate: 0 3px; }
+@keyframes bubble-in {
+  from { transform: translate(-50%, -100%) scale(.4); opacity: 0; }
+  to { transform: translate(-50%, -100%) scale(1); opacity: 1; }
+}
+@keyframes bubble-float {
+  0%, 100% { transform: translate(-50%, -100%); }
+  50% { transform: translate(-50%, calc(-100% - 4px)); }
+}
 .info { text-align: center; color: #5a7fa8; font-weight: 800; }
 
 .overlay {
@@ -46,6 +71,11 @@ body {
   box-shadow: 0 4px 0 #2271bd;
 }
 .card button:active { transform: translateY(3px); box-shadow: 0 1px 0 #2271bd; }
+.card button.secondary {
+  color: #5a7fa8; background: linear-gradient(#ffffff, #eaf4fb);
+  border: 3px solid #cfe6f7; box-shadow: 0 4px 0 #cfe6f7;
+}
+.card button.secondary:active { box-shadow: 0 1px 0 #cfe6f7; }
 .hint { color: #8aa1b8; font-size: 14px; margin: 0; }
 
 .shake { animation: shake .4s; }

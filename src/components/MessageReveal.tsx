@@ -1,11 +1,23 @@
-import { MESSAGE_TITLE, MESSAGE_TEXT } from "../game/constants";
+import { CONTINUE_LABEL, GIFTS } from "../game/constants";
 
-export default function MessageReveal() {
+type Props = {
+  gift: number;
+  /** fehlt beim letzten Geschenk: dann bleibt die Nachricht stehen */
+  onClose?: () => void;
+};
+
+export default function MessageReveal({ gift, onClose }: Props) {
+  const g = GIFTS[gift];
   return (
     <div className="overlay reveal">
       <div className="card">
-        <h2>🎉 {MESSAGE_TITLE}</h2>
-        <p>{MESSAGE_TEXT}</p>
+        <h2>{g.emoji} {g.title}</h2>
+        <p>{g.text}</p>
+        {onClose && (
+          <button type="button" autoFocus onClick={onClose}>
+            {CONTINUE_LABEL}
+          </button>
+        )}
       </div>
     </div>
   );

@@ -1,17 +1,25 @@
 import { useState } from "react";
 import { cyrb53, normalize } from "../lib/hash";
-import { ANSWER_HASH } from "../game/answerHash";
-import { PUZZLE_QUESTION, PUZZLE_HINT } from "../game/constants";
+import { ANSWER_HASHES } from "../game/answerHash";
+import { GIFTS, LATER_LABEL } from "../game/constants";
 
+type Props = {
+  gift: number;
+  onSolved: () => void;
+  onCancel: () => void;
+};
 
-export default function PuzzleModal({ onSolved }: { onSolved: () => void }) {
+export default function PuzzleModal({ gift, onSolved, onCancel }: Props) {
+  const g = GIFTS[gift];
+  const hash = ANSWER_HASHES[gift];
   const [value, setValue] = useState("");
   const [wrong, setWrong] = useState(false);
   const [tries, setTries] = useState(0);
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (cyrb53(normalize(value)) === ANSWER_HASH) {
+    // nur die richtige Antwort öffnet; ohne hinterlegten Hash bleibt das Geschenk zu
+    if (hash !== undefined && cyrb53(normalize(value)) === hash) {
       onSolved();
     } else {
       setWrong(true);
@@ -24,7 +32,7 @@ export default function PuzzleModal({ onSolved }: { onSolved: () => void }) {
     <div className="overlay">
       <form className={`card ${wrong ? "shake" : ""}`} onSubmit={submit}>
         <h2>🔒 Das Geschenk ist gesperrt</h2>
-        <p>{PUZZLE_QUESTION}</p>
+        <p>{g.question}</p>
         <input
           autoFocus
           value={value}
@@ -32,7 +40,10 @@ export default function PuzzleModal({ onSolved }: { onSolved: () => void }) {
           placeholder="Deine Antwort"
         />
         <button type="submit">Öffnen</button>
-        {tries >= 2 && <p className="hint">Tipp: {PUZZLE_HINT}</p>}
+        {tries >= 2 && <p className="hint">Tipp: {g.hint}</p>}
+        <button type="button" className="secondary" onClick={onCancel}>
+          {LATER_LABEL}
+        </button>
       </form>
     </div>
   );
